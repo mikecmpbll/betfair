@@ -9,6 +9,16 @@ module Betfair
           "Accept" => "application/json",
           "Content-Type" => "application/json"
         })
+
+        obj.class::API_OPERATIONS.each do |operation|
+          define_method(operation) do |*args|
+            raise "Not signed in" unless ["X-Authentication", "X-Application"].all? { |k| persistent_headers.key?(k) }
+
+            response = post("/#{operation.camelize}", *args)
+
+            JSON.parse(response)
+          end
+        end
       end
 
       def interactive_login(username, password)
@@ -18,24 +28,17 @@ module Betfair
         })
 
         session_token = JSON.parse(response)["token"]
-        puts session_token.inspect
 
         persistent_headers.merge!({
           "X-Authentication" => session_token
         })
-
-        true
       end
 
       def logout
         get("https://identitysso.betfair.com/api/logout")
       end
 
-      def bet()
-      end
-
       private
-
         def error_handling
         end
     end

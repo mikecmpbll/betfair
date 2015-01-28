@@ -8,6 +8,7 @@ module Betfair
     include ::Utils
 
     DEFAULT_SETTINGS = { retries: 5 }
+    API_OPERATIONS = [:list_event_types]
 
     attr_accessor :settings, :persistent_headers, :endpoint
 
