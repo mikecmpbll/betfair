@@ -16,7 +16,16 @@ And then execute:
 
 ## Usage
 
-In progress ...
+```ruby
+# create a client with app code (should the app code just be part of the login? no clue what app codes are for tbh.)
+client = Betfair::Client.new("your_app_code")
+
+# let's log in.
+client.interactive_login("your_username", "your_password")
+
+# and then log back out.
+client.logout
+```
 
 ## Contributing
 

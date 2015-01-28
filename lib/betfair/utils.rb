@@ -1,16 +1,14 @@
-module Betfair
-  module Utils
-    def attempt(enum)
-      exception = nil
-      enum.each do
-        begin
-          return yield
-        rescue Exception => e
-          exception = e
-          next
-        end
+module Utils
+  def attempt(enum)
+    exception = nil
+    enum.each do
+      begin
+        return yield
+      rescue Exception => e
+        exception = e
+        next
       end
-      raise exception
     end
+    raise exception
   end
 end

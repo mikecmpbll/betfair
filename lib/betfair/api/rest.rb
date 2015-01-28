@@ -1,3 +1,5 @@
+require 'json'
+
 module Betfair
   module API
     module REST
@@ -15,11 +17,14 @@ module Betfair
           headers: { "Content-Type" => "application/x-www-form-urlencoded" }
         })
 
-        session_token = JSON.parse(response.body)["token"]
+        session_token = JSON.parse(response)["token"]
+        puts session_token.inspect
 
         persistent_headers.merge!({
           "X-Authentication" => session_token
         })
+
+        true
       end
 
       def logout

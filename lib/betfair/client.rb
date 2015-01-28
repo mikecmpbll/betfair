@@ -1,6 +1,6 @@
-require "betfair/api/json"
+require "betfair/api/rest"
 require "betfair/api/rpc"
-require "betfair/utils"
+require "utils"
 require "httpi"
 
 module Betfair
@@ -9,12 +9,12 @@ module Betfair
 
     DEFAULT_SETTINGS = { retries: 5 }
 
-    attr_accessor :app_key, :settings, :persistent_headers, :endpoint
+    attr_accessor :settings, :persistent_headers, :endpoint
 
-    def intialize(app_key = nil, api_type = :rest, settings = {})
-      @app_key = app_key
+    def initialize(app_key = nil, api_type = :rest, settings = {})
       @settings = DEFAULT_SETTINGS.merge(settings)
       @persistent_headers = {}
+      @persistent_headers.merge!("X-Application" => app_key) if app_key
       extend_api(api_type)
     end
 
@@ -30,12 +30,13 @@ module Betfair
         end
       end
 
-      def configure_request(path, opts)
-        url = path.begins_with?("/") ? "#{endpoint}#{path}" : path
+      def configure_request(path, opts = {})
+        url = path.start_with?("/") ? "#{endpoint}#{path}" : path
 
-        opts[:headers] = (opts[:headers] || {}).merge(persistent_headers)
+        opts[:headers] = persistent_headers.merge(opts[:headers] || {})
+        opts.merge!(url: url)
 
-        HTTPI::Request.new(url, *args)
+        HTTPI::Request.new(opts)
       end
 
       def extend_api(type)
