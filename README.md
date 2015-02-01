@@ -42,7 +42,7 @@ event_types = client.list_event_types
 # horse racing is a meeting)
 racing_et_id = event_types.find{|et| et["eventType"]["name"] == "Horse Racing"}["eventType"]["id"]
 
-events = c.list_events({
+events = client.list_events({
   filter: {
     eventTypeIds: [racing_et_id],
     marketStartTime: {
