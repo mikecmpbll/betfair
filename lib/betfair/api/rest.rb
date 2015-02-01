@@ -1,4 +1,5 @@
 require 'json'
+require 'active_support/core_ext/string'
 
 module Betfair
   module API
@@ -11,23 +12,24 @@ module Betfair
         })
 
         obj.class::API_OPERATIONS.each do |operation|
-          define_method(operation) do |*args|
+          define_method(operation) do |body = nil|
             raise "Not signed in" unless ["X-Authentication", "X-Application"].all? { |k| persistent_headers.key?(k) }
 
-            response = post("/#{operation.camelize}", *args)
+            body ||= { filter: {} }
+            body = body.to_json
 
-            JSON.parse(response)
+            post("/#{operation.to_s.camelize(:lower)}/", body: body)
           end
         end
       end
 
       def interactive_login(username, password)
-        response = post("https://identitysso.betfair.com/api/login", {
+        json = post("https://identitysso.betfair.com/api/login", {
           body: { username: username, password: password },
           headers: { "Content-Type" => "application/x-www-form-urlencoded" }
         })
 
-        session_token = JSON.parse(response)["token"]
+        session_token = json["token"]
 
         persistent_headers.merge!({
           "X-Authentication" => session_token
@@ -39,7 +41,18 @@ module Betfair
       end
 
       private
-        def error_handling
+        [:get, :post].each do |verb|
+          define_method(verb) do |*args|
+            response = super(*args)
+            parse_response(response)
+          end
+        end
+
+        def parse_response(response)
+          JSON.parse(response).tap { |r| handle_errors(r) }
+        end
+
+        def handle_errors(response)
         end
     end
   end

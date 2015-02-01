@@ -8,14 +8,14 @@ module Betfair
     include ::Utils
 
     DEFAULT_SETTINGS = { retries: 5 }
-    API_OPERATIONS = [:list_event_types]
+    API_OPERATIONS = [:list_event_types, :list_events, :list_market_catalogue]
 
     attr_accessor :settings, :persistent_headers, :endpoint
 
-    def initialize(app_key = nil, api_type = :rest, settings = {})
+    def initialize(headers = {}, api_type = :rest, settings = {})
       @settings = DEFAULT_SETTINGS.merge(settings)
       @persistent_headers = {}
-      @persistent_headers.merge!("X-Application" => app_key) if app_key
+      @persistent_headers.merge!(headers)
       extend_api(api_type)
     end
 
