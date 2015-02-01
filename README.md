@@ -44,7 +44,7 @@ racing_et_id = event_types.find{|et| et["eventType"]["name"] == "Horse Racing"}[
 
 events = c.list_events({
   filter: {
-    eventTypeIds: [racing_et_id]],
+    eventTypeIds: [racing_et_id],
     marketStartTime: {
       from: Time.now.beginning_of_day.iso8601,
       to: Time.now.end_of_day.iso8601
