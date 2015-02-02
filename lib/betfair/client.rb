@@ -1,14 +1,15 @@
 require "betfair/api/rest"
 require "betfair/api/rpc"
-require "utils"
+require "betfair/utils"
 require "httpi"
 
 module Betfair
   class Client
-    include ::Utils
+    include Utils
 
     DEFAULT_SETTINGS = { retries: 5 }
-    API_OPERATIONS = [:list_event_types, :list_events, :list_market_catalogue]
+    API_OPERATIONS = [:list_event_types, :list_events, :list_market_catalogue,
+                      :list_market_book]
 
     attr_accessor :settings, :persistent_headers, :endpoint
 
