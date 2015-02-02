@@ -15,10 +15,7 @@ module Betfair
           define_method(operation) do |body = nil|
             raise "Not signed in" unless ["X-Authentication", "X-Application"].all? { |k| persistent_headers.key?(k) }
 
-            body ||= { filter: {} }
-            body = body.to_json
-
-            post("/#{operation.to_s.camelize(:lower)}/", body: body)
+            post("/#{operation.to_s.camelize(:lower)}/", body: body.to_json)
           end
         end
       end
