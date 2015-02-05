@@ -26,7 +26,7 @@ client = Betfair::Client.new("X-Application" => "your_app_code")
 client.interactive_login("your_username", "your_password")
 
 # you can do stuff like list event types:
-event_types = client.list_event_types
+event_types = client.list_event_types(filter: {})
 # =>  [
 #       {
 #         "eventType"=>{
