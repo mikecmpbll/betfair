@@ -5,23 +5,30 @@ module Betfair
   module API
     module REST
       def self.extended(obj)
-        obj.endpoint = "https://api.betfair.com/exchange/betting/rest/v1.0"
         obj.persistent_headers.merge!({
           "Accept" => "application/json",
           "Content-Type" => "application/json"
         })
 
-        obj.class::API_OPERATIONS.each do |operation|
-          define_method(operation) do |body = nil|
-            raise "Not signed in" unless ["X-Authentication", "X-Application"].all? { |k| persistent_headers.key?(k) }
+        apis = {
+          betting: "https://api.betfair.com/exchange/betting/rest/v1.0",
+          account: "https://api.betfair.com/exchange/account/rest/v1.0"
+        }
 
-            post("/#{operation.to_s.camelize(:lower)}/", body: body.to_json)
+        obj.class::OPERATIONS.each do |api, operations|
+          operations.each do |operation|
+            define_method(operation) do |body = nil|
+              raise "Not signed in" unless ["X-Authentication", "X-Application"].all? { |k| persistent_headers.key?(k) }
+
+              post(url: "#{apis[api]}/#{operation.to_s.camelize(:lower)}/", body: body.to_json)
+            end
           end
         end
       end
 
       def interactive_login(username, password)
-        json = post("https://identitysso.betfair.com/api/login", {
+        json = post({
+          url: "https://identitysso.betfair.com/api/login",
           body: { username: username, password: password },
           headers: { "Content-Type" => "application/x-www-form-urlencoded" }
         })
@@ -34,7 +41,7 @@ module Betfair
       end
 
       def logout
-        get("https://identitysso.betfair.com/api/logout")
+        get(url: "https://identitysso.betfair.com/api/logout")
       end
 
       private

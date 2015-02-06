@@ -8,10 +8,13 @@ module Betfair
     include Utils
 
     DEFAULT_SETTINGS = { retries: 5 }
-    API_OPERATIONS = [:list_event_types, :list_events, :list_market_catalogue,
-                      :list_market_book]
+    OPERATIONS = {
+      betting: [:list_event_types, :list_events, :list_market_catalogue,
+                :list_market_book, :place_orders],
+      account: [:get_account_funds]
+    }
 
-    attr_accessor :settings, :persistent_headers, :endpoint
+    attr_accessor :settings, :persistent_headers, :betting_endpoint, :accounts_endpoint
 
     def initialize(headers = {}, api_type = :rest, settings = {})
       @settings = DEFAULT_SETTINGS.merge(settings)
@@ -32,11 +35,8 @@ module Betfair
         end
       end
 
-      def configure_request(path, opts = {})
-        url = path.start_with?("/") ? "#{endpoint}#{path}" : path
-
+      def configure_request(opts = {})
         opts[:headers] = persistent_headers.merge(opts[:headers] || {})
-        opts.merge!(url: url)
 
         HTTPI::Request.new(opts)
       end
