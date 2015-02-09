@@ -1,6 +1,6 @@
 # Betfair
 
-A library for the Betfair Exchange API (API-NG). Still in early development stage.
+A lightweight ruby wrapper for the Betfair Exchange API (API-NG).
 
 Full API description, including API parameters etc, is available from [Betfair's dedicated API site](https://api.developer.betfair.com/services/webapps/docs/display/1smk3cen4v3lu3yomq5qye0ni/API-NG+Overview).
 
@@ -38,34 +38,50 @@ event_types = client.list_event_types(filter: {})
 #       ..etc..
 #     ]
 
-# list todays GB & Ireland horse racing events: (note: an event in
-# horse racing is a meeting)
+# todays GB & Ireland horse racing win & place markets
 racing_et_id = event_types.find{|et| et["eventType"]["name"] == "Horse Racing"}["eventType"]["id"]
 
-events = client.list_events({
+racing_markets = client.list_market_catalogue({
   filter: {
     eventTypeIds: [racing_et_id],
+    marketTypeCodes: ["WIN", "PLACE"],
     marketStartTime: {
       from: Time.now.beginning_of_day.iso8601,
       to: Time.now.end_of_day.iso8601
     },
     marketCountries: ["GB", "IRE"]
-  }
+  },
+  maxResults: 200,
+  marketProjection: [
+    "MARKET_START_TIME",
+    "RUNNER_METADATA",
+    "RUNNER_DESCRIPTION",
+    "EVENT_TYPE",
+    "EVENT",
+    "COMPETITION"
+  ]
 })
-# =>  [
-#       {
-#         "event"=>{
-#           "id"=>"27358916",
-#           "name"=>"Ling 2nd Feb",
-#           "countryCode"=>"GB",
-#           "timezone"=>"Europe/London",
-#           "venue"=>"Lingfield",
-#           "openDate"=>"2015-02-02T13:45:00.000Z"
-#         },
-#         "marketCount"=>12
-#       },
-#       .. etc ..
-#     ]
+
+# given an eventId from the market catalogue (the first for example),
+# let's have a flutter shall we?
+market = racing_markets.first
+market_id = market["marketId"]
+selection_id = market["runners"].find { |r| r["runnerName"] == "Imperial Commander" }["selectionId"]
+
+# this places an Betfair SP bet with a price limit of 3.0 .
+# see the API docs for the different types of orders.
+client.place_orders({
+  marketId: market_id,
+  instructions: [{
+    orderType: "LIMIT_ON_CLOSE",
+    selectionId: selection_id,
+    side: "BACK",
+    limitOnCloseOrder: {
+      liability: liability,
+      price: 3.0
+    }
+  }]
+})
 
 # log back out.
 client.logout
