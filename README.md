@@ -87,6 +87,12 @@ client.place_orders({
 client.logout
 ```
 
+## Todo
+
+1. Support the other (more recommended) kinds of authentication
+2. Check it's functionally complete
+3. Error handling
+
 ## Contributing
 
 1. Fork it ( https://github.com/mikecmpbll/betfair/fork )
