@@ -9,12 +9,16 @@ Full API description, including API parameters etc, is available from [Betfair's
 Add this line to your application's Gemfile:
 
 ```ruby
-gem 'betfair', github: 'mikecmpbll/betfair'
+gem 'betfair-ng'
 ```
 
 And then execute:
 
     $ bundle
+    
+Or install it yourself as:
+
+    $ gem install betfair-ng
 
 ## Usage
 
