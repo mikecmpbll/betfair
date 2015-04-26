@@ -4,13 +4,12 @@ $LOAD_PATH.unshift(lib) unless $LOAD_PATH.include?(lib)
 require 'betfair/version'
 
 Gem::Specification.new do |spec|
-  spec.name          = "betfair"
+  spec.name          = "betfair-ng"
   spec.version       = Betfair::VERSION
   spec.authors       = ["Mike Campbell"]
   spec.email         = ["mike@wordofmike.net"]
-  spec.summary       = %q{TODO: Write a short summary. Required.}
-  spec.description   = %q{TODO: Write a longer description. Optional.}
-  spec.homepage      = ""
+  spec.summary       = %q{A lightweight wrapper for the Betfair Exchange API-NG}
+  spec.homepage      = "http://github.com/mikecmpbll/betfair"
   spec.license       = "MIT"
 
   spec.files         = `git ls-files -z`.split("\x0")
