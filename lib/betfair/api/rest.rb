@@ -33,11 +33,24 @@ module Betfair
           headers: { "Content-Type" => "application/x-www-form-urlencoded" }
         })
 
-        session_token = json["token"]
+        add_session_token_to_persistent_headers(json["token"])
+      end
 
-        persistent_headers.merge!({
-          "X-Authentication" => session_token
+      # Performs the login procedure recommended for applications which run autonomously
+      #   username: Betfair account username string
+      #   password: Betfair account password string
+      #   cert_key_file_path: Path to Betfair client certificate private key file
+      #   cert_key_path: Path to Betfair client certificate public key file associated with Betfair account
+      def non_interactive_login(username, password, cert_key_file_path, cert_file_path)
+        json = post({
+          url: "https://identitysso.betfair.com/api/certlogin",
+          body: { username: username, password: password },
+          headers: { "Content-Type"  => "application/x-www-form-urlencoded" },
+          cert_key_file_path: cert_key_file_path,
+          cert_file_path: cert_file_path
         })
+
+        add_session_token_to_persistent_headers(json["sessionToken"])
       end
 
       def logout
@@ -50,6 +63,12 @@ module Betfair
             response = super(*args)
             parse_response(response)
           end
+        end
+
+        def add_session_token_to_persistent_headers(session_token)
+          persistent_headers.merge!({
+            "X-Authentication" => session_token
+          })
         end
 
         def parse_response(response)
