@@ -93,9 +93,7 @@ client.logout
 
 ## Todo
 
-1. Support the other (more recommended) kinds of authentication
-2. Check it's functionally complete
-3. Error handling
+1. Error handling
 
 ## Contributing
 
