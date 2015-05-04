@@ -40,8 +40,14 @@ module Betfair
 
       def configure_request(opts = {})
         opts[:headers] = persistent_headers.merge(opts[:headers] || {})
+        request = HTTPI::Request.new(opts)
 
-        HTTPI::Request.new(opts)
+        # It would be nice to have HTTPI do this itself but HTTPI::Request#mass_assign doesn't merge auth fields
+        unless opts[:cert_file_path].nil? or opts[:cert_key_file_path].nil?
+          request.auth.ssl.cert_key_file = opts[:cert_key_file_path]
+          request.auth.ssl.cert_file = opts[:cert_file_path]
+        end
+        request
       end
 
       def extend_api(type)
