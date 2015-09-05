@@ -2,7 +2,9 @@
 
 A lightweight ruby wrapper for the Betfair Exchange API (API-NG).
 
-Full API description, including API parameters etc, is available from [Betfair's dedicated API site](https://api.developer.betfair.com/services/webapps/docs/display/1smk3cen4v3lu3yomq5qye0ni/API-NG+Overview).
+Full API description, including API parameters etc, is available from [Betfair's dedicated API site](https://api.developer.betfair.com/services/webapps/docs/x/G4AS).
+
+Oh, and always [bet responsibly](http://responsiblegambling.betfair.com/). Duh.
 
 ## Installation
 
