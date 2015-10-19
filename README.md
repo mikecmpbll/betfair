@@ -93,6 +93,36 @@ client.place_orders({
 client.logout
 ```
 
+## Best practices
+
+### Persistent HTTP connection
+
+Betfair [recommends](https://api.developer.betfair.com/services/webapps/docs/x/VAJL) that we pass the `Connection: keep-alive` header with each request in order to take advantage of HTTP 1.1's ability to have [persistent connections](https://en.wikipedia.org/wiki/HTTP_persistent_connection) which reduces latency for subsequent requests.
+
+This library uses the [`httpi`](https://github.com/savonrb/httpi) gem, which supports a number of different ruby http client adapters. [`httpclient`](https://github.com/nahi/httpclient) and [`net-http-persistent`](https://github.com/drbrain/net-http-persistent) are two which utilise persistent connections by default. To use `net-http-persistent` you should ensure that the gem is installed and in your load path, then set the HTTPI adapter:
+
+```ruby
+require 'betfair'
+HTTPI.adapter = :net_http_persistent
+```
+
+The same goes for `httpclient`, but it's not strictly necessary to explicitly set the adapter as it has a higher [load order precedence](https://github.com/savonrb/httpi/blob/master/lib/httpi/adapter.rb#L16) than the other adapters.
+
+### Account security and authentication
+
+Despite the example in this readme, you should definitely use the [non-interactive](https://api.developer.betfair.com/services/webapps/docs/x/J4Q6) login for your bots; check the Betfair docs about how to set that up. To login this way, use the `non_interactive_login` method:
+
+```ruby
+# Performs the login procedure recommended for applications which run autonomously
+#   username: Betfair account username string
+#   password: Betfair account password string
+#   cert_key_file_path: Path to Betfair client certificate private key file
+#   cert_key_path: Path to Betfair client certificate public key file associated with Betfair account
+client.non_interactive_login(username, password, cert_key_file_path, cert_file_path)
+```
+
+This also allows you to use 2-factor authentication for your online account access, which I'd also strongly recommend that you do. I'm pretty sure you wouldn't be comfortable if your bank accounts had nothing more advanced than credential access, and seeing as a lot of you will have a reasonable amount of money stored in your Betfair accounts, I don't think you should settle for that there, either.
+
 ## Todo
 
 1. Error handling
