@@ -92,6 +92,23 @@ client.place_orders({
 # log back out.
 client.logout
 ```
+### Using in a rails application
+Due to the rails autoloading "feature", if you wish to use in a Rails application, you will need to move the require statement into the class initializer:
+
+```
+class BetfairCommands
+
+  def initialize
+    require 'betfair'
+    @client =  Betfair::Client.new('X-Application' => betfair_api_key)
+  end
+```
+
+otherwise you will get the following error:
+
+```
+<NameError> uninitialized constant Betfair::Client
+```
 
 ## Best practices
 
