@@ -93,6 +93,16 @@ client.place_orders({
 client.logout
 ```
 
+## Settings
+
+You can change the endpoint from the default api.betfair.com .. to api-au.betfair.com by using the `endpoint` option when you initialize the Betfair client.
+
+```ruby
+client = Betfair::Client.new({ "X-Application" => "your_app_code" }, { endpoint: :aus })
+```
+
+The default is :default.
+
 ## Best practices
 
 ### Persistent HTTP connection

@@ -11,8 +11,8 @@ module Betfair
         })
 
         apis = {
-          betting: "https://api.betfair.com/exchange/betting/rest/v1.0",
-          account: "https://api.betfair.com/exchange/account/rest/v1.0"
+          betting: "https://#{obj.endpoint}.betfair.com/exchange/betting/rest/v1.0",
+          account: "https://#{obj.endpoint}.betfair.com/exchange/account/rest/v1.0",
         }
 
         obj.class::OPERATIONS.each do |api, operations|

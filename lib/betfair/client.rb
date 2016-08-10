@@ -18,9 +18,11 @@ module Betfair
       account: [:get_account_funds]
     }
 
-    attr_accessor :settings, :request_opts, :persistent_headers
+    attr_accessor :settings, :request_opts, :persistent_headers, :endpoint
 
     def initialize(headers = {}, opts = {}, api_type = :rest)
+      set_endpoint!(opts.delete(:endpoint))
+
       setting_opts         = opts.extract!(:retries, :adapter)
       @settings            = DEFAULT_SETTINGS.merge(setting_opts)
       @persistent_headers  = headers
@@ -51,6 +53,18 @@ module Betfair
             r.auth.ssl.cert_file     = opts[:cert_file_path]
           end
         end
+      end
+
+      def set_endpoint!(endpoint)
+        @endpoint =
+          case endpoint
+          when :default, nil
+            "api"
+          when :aus
+            "api-au"
+          else
+            raise RuntimeError, "invalid endpoint, please choose :default or :aus"
+          end
       end
 
       def extend_api(type)
