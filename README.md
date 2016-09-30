@@ -2,7 +2,7 @@
 
 A lightweight ruby wrapper for the Betfair Exchange API (API-NG).
 
-Full API description, including API parameters etc, is available from [Betfair's dedicated API site](https://api.developer.betfair.com/services/webapps/docs/x/G4AS).
+Full API description, including API parameters etc, is available from [Betfair's dedicated API site](http://docs.developer.betfair.com/docs/).
 
 Oh, and always [bet responsibly](http://responsiblegambling.betfair.com/). Duh.
 
@@ -107,7 +107,7 @@ The default is :default.
 
 ### Persistent HTTP connection
 
-Betfair [recommends](https://api.developer.betfair.com/services/webapps/docs/x/VAJL) that we pass the `Connection: keep-alive` header with each request in order to take advantage of HTTP 1.1's ability to have [persistent connections](https://en.wikipedia.org/wiki/HTTP_persistent_connection) which reduces latency for subsequent requests.
+Betfair [recommends](http://docs.developer.betfair.com/docs/x/pAFD) that we pass the `Connection: keep-alive` header with each request in order to take advantage of HTTP 1.1's ability to have [persistent connections](https://en.wikipedia.org/wiki/HTTP_persistent_connection) which reduces latency for subsequent requests.
 
 This library uses the [`httpi`](https://github.com/savonrb/httpi) gem, which supports a number of different ruby http client adapters. [`httpclient`](https://github.com/nahi/httpclient) and [`net-http-persistent`](https://github.com/drbrain/net-http-persistent) are two which utilise persistent connections by default. To use `net-http-persistent` you should ensure that the gem is installed and in your load path, then set the HTTPI adapter:
 
@@ -120,7 +120,7 @@ The same goes for `httpclient`, but it's not strictly necessary to explicitly se
 
 ### Account security and authentication
 
-Despite the example in this readme, you should definitely use the [non-interactive](https://api.developer.betfair.com/services/webapps/docs/x/J4Q6) login for your bots; check the Betfair docs about how to set that up. To login this way, use the `non_interactive_login` method:
+Despite the example in this readme, you should definitely use the [non-interactive](http://docs.developer.betfair.com/docs/x/J4Q6) login for your bots; check the Betfair docs about how to set that up. To login this way, use the `non_interactive_login` method:
 
 ```ruby
 # Performs the login procedure recommended for applications which run autonomously
