@@ -28,7 +28,7 @@ module Betfair
 
       def interactive_login(username, password)
         json = post({
-          url: "https://identitysso.betfair.com/api/login",
+          url: "https://identitysso-cert.betfair.com/api/certlogin",
           body: { username: username, password: password },
           headers: { "Content-Type" => "application/x-www-form-urlencoded" }
         })
