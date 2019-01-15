@@ -43,7 +43,7 @@ module Betfair
       #   cert_key_path: Path to Betfair client certificate public key file associated with Betfair account
       def non_interactive_login(username, password, cert_key_file_path, cert_file_path)
         json = post({
-          url: "https://identitysso.betfair.com/api/certlogin",
+          url: "https://identitysso-cert.betfair.com/api/certlogin",
           body: { username: username, password: password },
           headers: { "Content-Type"  => "application/x-www-form-urlencoded" },
           cert_key_file_path: cert_key_file_path,
